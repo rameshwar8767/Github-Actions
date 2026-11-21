@@ -1,20 +1,30 @@
-# What is the goal of your workflow?
-# Goal: Whenever someone changes the python code, the liner will check if the syntax, format, indentation (Linting) is correct or not.
 
 name: Auto Linter
 
 on:
   push:
-    paths: "*.py"
+    paths:
+      - "**.py"
 
 jobs:
   code:
     runs-on: ubuntu-latest
+
     steps:
-    # this step will automatically clone the code of the current branch into the runner
-      - name: Checkout/Clone the Code
-        uses: actions/checkout@v7
-    # this step will install the linting tool
+      # Clone the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Install Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Install Linter
       - name: Install Linter
-        run: pip install linter
- 
+        run: pip install flake8
+
+      # Run Linter
+      - name: Run Python Linter
+        run: flake8 .
